@@ -1,6 +1,8 @@
-import Alumni from '../models/index';
-
+import db from '../models';
 import { Request, Response } from 'express';
+
+const sequelize = db.sequelize;
+const Alumni = db.Alumni;
 
 class AlumniController {
     public static async create(req: Request, res: Response): Promise<void> {
@@ -15,10 +17,10 @@ class AlumniController {
     }
 
     public static async getAll(req: Request, res: Response): Promise<void> {
+        const alumni = await Alumni.findAll();
         try {
-            const alumni = await Alumni.findAll();
             res.status(200).json(alumni);
-        } catch (error) {
+        } catch (error:any) {
             res.status(500).json({ message: 'Internal server error', error });
         }
     }
