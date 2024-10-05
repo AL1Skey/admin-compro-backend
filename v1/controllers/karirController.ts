@@ -1,6 +1,6 @@
-import Karir from "../models/index";
 import { Request, Response } from "express";
-
+import db from "../models";
+const Karir = db.Karir;
 class KarirController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
@@ -15,6 +15,8 @@ class KarirController {
       res.status(201).json({ message: "Karir created successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    } finally{
+        return;
     }
   }
 
@@ -24,6 +26,8 @@ class KarirController {
       res.status(200).json(karir);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    } finally{
+        return;
     }
   }
 
@@ -33,6 +37,8 @@ class KarirController {
       res.status(200).json(karir);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    } finally{
+        return;
     }
   }
 
@@ -43,6 +49,8 @@ class KarirController {
       res.status(200).json({ message: "Karir updated successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    } finally{
+        return;
     }
   }
 
@@ -52,6 +60,8 @@ class KarirController {
       res.status(200).json({ message: "Karir deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
+    } finally{
+        return;
     }
   }
 }

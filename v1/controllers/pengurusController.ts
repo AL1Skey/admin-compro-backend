@@ -1,6 +1,6 @@
-import Pengurus from '../models/index';
 import { Request, Response } from 'express';
-
+import db from '../models';
+const Pengurus = db.Pengurus;
 class PengurusController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
@@ -19,6 +19,8 @@ class PengurusController {
       res.status(201).json({ message: 'Pengurus created successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
+    } finally{
+        return;
     }
   }
 
@@ -28,6 +30,8 @@ class PengurusController {
       res.status(200).json(pengurus);
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
+    } finally{
+        return;
     }
   }
 
@@ -37,6 +41,8 @@ class PengurusController {
       res.status(200).json(pengurus);
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
+    } finally{
+        return;
     }
   }
 
@@ -46,6 +52,8 @@ class PengurusController {
       res.status(200).json({ message: 'Pengurus updated successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
+    } finally{
+        return;
     }
   }
 
@@ -55,6 +63,8 @@ class PengurusController {
       res.status(200).json({ message: 'Pengurus deleted successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
+    } finally{
+        return;
     }
   }
 }

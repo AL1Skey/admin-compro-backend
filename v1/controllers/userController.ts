@@ -1,8 +1,7 @@
-import exp from 'constants';
-import User from '../models/index';
 
 import { Request, Response } from 'express';
-
+import db from '../models';
+const User = db.User;
 class UserController{
 
     public static async create(req: Request, res: Response): Promise<void>{
@@ -12,6 +11,8 @@ class UserController{
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
         }
     }
 
@@ -21,6 +22,8 @@ class UserController{
             res.status(200).json(users);
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
         }
     }
 
@@ -30,6 +33,8 @@ class UserController{
             res.status(200).json(user);
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
         }
     }
 
@@ -39,6 +44,8 @@ class UserController{
             res.status(200).json({ message: 'User updated successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
         }
     }
 
@@ -48,6 +55,8 @@ class UserController{
             res.status(200).json({ message: 'User deleted successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
         }
     }
 }

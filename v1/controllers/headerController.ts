@@ -1,6 +1,7 @@
-import Header from "../models/index";
+import db from "../models";
 import { Request, Response } from "express";
 
+const Header = db.Header;
 class HeaderController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
@@ -9,7 +10,9 @@ class HeaderController {
       res.status(201).json({ message: "Header created successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
-    }
+    } finally {
+        return;
+        }
   }
 
     public static async getAll(req: Request, res: Response): Promise<void> {
@@ -18,6 +21,8 @@ class HeaderController {
         res.status(200).json(header);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -27,6 +32,8 @@ class HeaderController {
         res.status(200).json(header);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -36,6 +43,8 @@ class HeaderController {
         res.status(200).json({ message: "Header updated successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -45,6 +54,8 @@ class HeaderController {
         res.status(200).json({ message: "Header deleted successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 }

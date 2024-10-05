@@ -1,6 +1,7 @@
-import Footer from "../models/index";
+import db from "../models";
 import { Request, Response } from "express";
 
+const Footer = db.Footer;
 class FooterController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
@@ -16,6 +17,8 @@ class FooterController {
       res.status(201).json({ message: "Footer created successfully" });
     } catch (err) {
       res.status(500).json({ message: "Internal server error" });
+    } finally {
+      return;
     }
   }
 
@@ -25,6 +28,8 @@ class FooterController {
         res.status(200).json(footer);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -34,6 +39,8 @@ class FooterController {
         res.status(200).json(footer);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -43,6 +50,8 @@ class FooterController {
         res.status(200).json({ message: "Footer updated successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 
@@ -52,6 +61,8 @@ class FooterController {
         res.status(200).json({ message: "Footer deleted successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally{
+            return;
         }
     }
 }

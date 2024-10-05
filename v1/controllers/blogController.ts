@@ -1,5 +1,5 @@
-import Blog from '../models/index';
-
+import db from '../models';
+const Blog = db.Blog;
 import { Request, Response } from 'express';
 
 class BlogController{
@@ -8,8 +8,10 @@ class BlogController{
             const { title, description,category,author, image,createAt } = req.body;
             const blog = await Blog.create({ title, description,category,author, image,createAt });
             res.status(201).json({ message: 'Blog created successfully' });
+            return;
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+            return;
         }
     }
 
@@ -19,6 +21,8 @@ class BlogController{
             res.status(200).json(blog);
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally {
+            return;
         }
     }
 
@@ -28,6 +32,8 @@ class BlogController{
             res.status(200).json(blog);
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally {
+            return;
         }
     }
 
@@ -37,6 +43,8 @@ class BlogController{
             res.status(200).json({ message: 'Blog updated successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally {
+            return;
         }
     }
 
@@ -46,9 +54,11 @@ class BlogController{
             res.status(200).json({ message: 'Blog deleted successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
+        } finally {
+            return;
         }
     }
-    
+
 }
 
 export default BlogController;

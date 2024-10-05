@@ -1,6 +1,7 @@
-import Dewan from "../models/index";
+import db from "../models";
 import { Request, Response } from "express";
 
+const Dewan = db.Dewan;
 class DewanController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
@@ -27,9 +28,11 @@ class DewanController {
         twitter,
       });
       res.status(201).json({ message: "Dewan created successfully" });
-    } catch (err) {
+    } catch (error) {
       res.status(500).json({ message: "Internal server error" });
-    }
+    } finally {
+        return;
+        }
   }
 
     public static async getAll(req: Request, res: Response): Promise<void> {
@@ -38,6 +41,8 @@ class DewanController {
         res.status(200).json(dewan);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally {
+        return;
         }
     }
 
@@ -47,6 +52,8 @@ class DewanController {
         res.status(200).json(dewan);
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally {
+            return;
         }
     }
 
@@ -56,6 +63,8 @@ class DewanController {
         res.status(200).json({ message: "Dewan updated successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally {
+            return;
         }
     }
 
@@ -65,9 +74,11 @@ class DewanController {
         res.status(200).json({ message: "Dewan deleted successfully" });
         } catch (error) {
         res.status(500).json({ message: "Internal server error" });
+        } finally {
+            return;
         }
     }
-    
+
 }
 
 export default DewanController;
