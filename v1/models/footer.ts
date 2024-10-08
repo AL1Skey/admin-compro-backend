@@ -2,6 +2,7 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 interface FooterAttributes {
   address: string;
+  addressUrl: string;
   phone: string;
   email: string;
   facebook: string;
@@ -11,6 +12,7 @@ interface FooterAttributes {
 
 class Footer extends Model<FooterAttributes> {
   public address!: string;
+  public addressUrl!: string;
   public phone!: string;
   public email!: string;
   public facebook!: string;
@@ -26,6 +28,7 @@ export default (sequelize: Sequelize) => {
   Footer.init(
     {
       address: DataTypes.STRING,
+      addressUrl: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
       facebook: DataTypes.STRING,
