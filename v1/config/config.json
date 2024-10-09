@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "iaajofficialDev",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "username": "u197401598_iaajofficial",
+    "password": "Iaajofficial123#",
+    "database": "u197401598_iaajofficial",
+    "host": "srv1367.hstgr.io",
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
@@ -14,10 +14,10 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "iaajofficial",
+    "username": "u197401598_iaajofficial",
     "password": "Iaajofficial123#",
-    "database": "iaajofficial",
-    "host": "127.0.0.1:3306",
-    "dialect": "postgres"
+    "database": "u197401598_iaajofficial",
+    "host": "srv1367.hstgr.io",
+    "dialect": "mysql"
   }
 }

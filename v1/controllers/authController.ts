@@ -26,8 +26,8 @@ class AuthController {
 
     public static async register(req: Request, res: Response): Promise<void> {
         try {
-            const { firstName, lastName, email, password, role } = req.body;
-            const user = User.create({ firstName, lastName, email, password, role });
+            const { name, email, password, role } = req.body;
+            const user = User.create({ name, email, password, role });
             res.status(201).json({ message: 'User created successfully' });
             return;
         }

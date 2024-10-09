@@ -6,8 +6,8 @@ class UserController{
 
     public static async create(req: Request, res: Response): Promise<void>{
         try {
-            const { firstName, lastName, email, password, role } = req.body;
-            const user = await User.create({ firstName, lastName, email, password, role});
+            const { name, email, password, role } = req.body;
+            const user = await User.create({ name, email, password, role});
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });

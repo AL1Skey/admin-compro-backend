@@ -39,4 +39,6 @@ AboutUs.init(
     modelName: 'AboutUs',
   }
 )
+
+  return AboutUs;
 };

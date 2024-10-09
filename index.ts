@@ -1,10 +1,14 @@
 import express from 'express';
 import routes from './v1/routes/routes';
 import { configDotenv } from 'dotenv';
+import cors from 'cors';
 const app = express();
 const port = 3000;
 
 configDotenv();
+
+app.use(express.json());
+app.use(cors());
 
 app.get('/api/v1', (req, res) => {
   res.send('Hello World!');

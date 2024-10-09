@@ -1,16 +1,14 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
 interface UserAttributes {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
   role: string;
 }
 
 class User extends Model<UserAttributes> {
-  public firstName!: string;
-  public lastName!: string;
+  public name!: string;
   public email!: string;
   public password!: string;
   public role!: string;
@@ -23,8 +21,7 @@ class User extends Model<UserAttributes> {
 export default (sequelize: Sequelize) => {
   User.init(
     {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       role: DataTypes.STRING,
