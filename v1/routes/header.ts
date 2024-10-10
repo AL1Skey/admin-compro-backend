@@ -1,12 +1,12 @@
 import { Router } from "express";
 import HeaderController from "../controllers/headerController";
-
+import { upload, uploadToCloudinary } from "../helper/upload";
 const router = Router();
 
-router.post("/header", HeaderController.create);
-router.get("/header", HeaderController.getAll);
-router.get("/header/:id", HeaderController.getById);
-router.put("/header/:id", HeaderController.update);
-router.delete("/header/:id", HeaderController.delete);
+router.post("/",upload.single('image'),  uploadToCloudinary, HeaderController.create);
+router.get("/", HeaderController.getAll);
+router.get("/:id", HeaderController.getById);
+router.put("/:id",upload.single('image'),  uploadToCloudinary, HeaderController.update);
+router.delete("/:id", HeaderController.delete);
 
 export default router;

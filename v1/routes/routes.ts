@@ -20,14 +20,14 @@ router.use('/public',publicRoutes);
 
 // Admin
 router.use('/', authRoutes);
-router.use('/',Auth.superAdmin, userRoutes);
 router.use('/',Auth.authOnly,alumni);
 router.use('/',Auth.authOnly,blog);
 router.use('/',Auth.authOnly,dewan);
 router.use('/',Auth.authOnly,footer );
-router.use('/',Auth.authOnly,header );
+router.use('/header',Auth.authOnly,header );
 router.use('/',Auth.authOnly,karir );
 router.use('/',Auth.authOnly,pengurus );
+router.use('/',Auth.superAdmin, userRoutes);
 
 // router.use('/', cmsRoutes);
 

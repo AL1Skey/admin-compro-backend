@@ -1,54 +1,55 @@
 import {Request, Response, NextFunction} from 'express';
 import { verifyToken } from '../helper/jwt';
-import User from '../models/index';
+import db from '../models';
 import { JwtPayload } from 'jsonwebtoken';
 
+const User = db.User;
 // Extending the Request interface to include 'user'
 interface AuthenticatedRequest extends Request {
     user?: any;
 }
 
-class Auth{
-    
-    public static async authenticate(token:string|undefined): Promise<any>{
-        try{
-            // Check if the user is authenticated
-            // If the user is authenticated, call next()
-            // If the user is not authenticated, return res.status(401).json({ message: 'Unauthenticated' });
-
-            if(!token){
-                return { status:false ,message: 'Unauthenticated' };
-            }
-
-            const {id} = verifyToken(token) as JwtPayload;
-            const user = await User.findByPk(id);
-
-            if(!user){
-                return { status:false, message: 'User Not Found' };
-            }
-
-            return { status:true, user };
-
-        }catch(err){
-            return { status:false, message: 'Internal server error' };
+async function authenticate(token:string|undefined): Promise<any>{
+    try{
+        // Check if the user is authenticated
+        // If the user is authenticated, call next()
+        // If the user is not authenticated, return res.status(401).json({ message: 'Unauthenticated' });
+        if(!token){
+            return { status:false ,message: 'Unauthenticated' };
         }
-    }
+        token = token?.split(' ')[1]
+        console.log(token,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        const {id} = verifyToken(token) as JwtPayload;
+        const user = await User.findByPk(id);
 
+        if(!user){
+            return { status:false, message: 'User Not Found' };
+        }
+
+        return { status:true, user };
+
+    }catch(err){
+        console.log(err);
+        return { status:false, message: 'Internal server error' };
+    }
+}
+class Auth{
     public static async authOnly(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<any>{
         try{
             const token:string|undefined = req.headers.authorization;
-
-            const data = await this.authenticate(token);
-            
+            console.log(token,"<<<<<<<<<<<<<<<<<<");
+            const data = await authenticate(token);
+            console.log(data)
             if(!data.status){
                 return res.status(401).json({ message: data.message });
             }
 
             req.user = data.user;
-
+            console.log(req.user);
             next();
         }catch(err){
-            res.status(500).json({ message: 'Internal server error' });
+            console.log(err)
+            return res.status(500).json({ message: 'Internal server error in Authentication Only',error:err });
         }
     }
 
@@ -57,7 +58,7 @@ class Auth{
         try{
             const token = req.headers.authorization;
 
-            const data = await this.authenticate(token);
+            const data = await authenticate(token);
             
             if(!data.status){
                 return res.status(401).json({ message: data.message });
@@ -71,7 +72,8 @@ class Auth{
 
             next();
         }catch(err){
-            res.status(500).json({ message: 'Internal server error' });
+            console.log(err)
+            return res.status(500).json({ message: 'Internal server error in Authentication SUper Admin' });
         }
     }
 
@@ -79,7 +81,7 @@ class Auth{
         try{
             const token = req.headers.authorization;
 
-            const data = await this.authenticate(token);
+            const data = await authenticate(token);
             
             if(!data.status){
                 return res.status(401).json({ message: data.message });
@@ -93,7 +95,7 @@ class Auth{
 
             next();
         }catch(err){
-            res.status(500).json({ message: 'Internal server error' });
+            return res.status(500).json({ message: 'Internal server error in Authentication Admin' });
         }
     }
 }

@@ -6,12 +6,14 @@ import FooterController from '../controllers/footerController';
 import HeaderController from '../controllers/headerController';
 import KarirController from '../controllers/karirController';
 import PengurusController from '../controllers/pengurusController';
-
+import UserController from '../controllers/userController';
 // import cmsRoutes from './cms';
 
 const router = express.Router();
 
 // Public routes
+router.get('/user', UserController.getOne);
+
 router.get('/alumni', AlumniController.getAll);
 router.get('/alumni/:id', AlumniController.getById);
 
