@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 import multer, { Multer } from 'multer';
 import { v2 as cloudinary, UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
-import sharp from 'sharp';
+// import sharp from 'sharp';
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
@@ -37,9 +37,7 @@ export const uploadToCloudinary = async (req: Request, res: Response, next: Next
 
     const cloudinaryUrls: string[] = [];
     for (const file of files) {
-      const resizedBuffer: Buffer = await sharp(file.buffer)
-        .resize({ width: 800, height: 600 })
-        .toBuffer();
+      const resizedBuffer: Buffer = file.buffer;
 
       const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(

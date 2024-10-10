@@ -24,13 +24,15 @@ router.use('/', authRoutes);
 router.use('/alumni',Auth.authOnly,alumni);
 router.use('/blog',Auth.authOnly,blog);
 router.use('/about-us',Auth.authOnly,aboutUs);
-router.use('/',Auth.authOnly,dewan);
-router.use('/',Auth.authOnly,footer );
+router.use('/dewan',Auth.authOnly,dewan);
+router.use('/footer',Auth.authOnly,footer );
 router.use('/header',Auth.authOnly,header );
-router.use('/',Auth.authOnly,karir );
-router.use('/',Auth.authOnly,pengurus );
-router.use('/',Auth.superAdmin, userRoutes);
+router.use('/karir',Auth.authOnly,karir );
+router.use('/pengurus',Auth.authOnly,pengurus );
+
 
 // router.use('/', cmsRoutes);
+router.use('/users',Auth.superAdmin, userRoutes);
+
 
 export default router;

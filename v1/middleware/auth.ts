@@ -16,9 +16,11 @@ async function authenticate(token: string | undefined): Promise<any> {
         }
 
         token = token.split(' ')[1];
+        console.log('token', token);
         const { id } = verifyToken(token) as JwtPayload;
+        console.log('id', id);
         const user = await User.findByPk(id);
-
+        console.log('user', user);
         if (!user) {
             return { status: false, message: 'User Not Found' };
         }
@@ -41,7 +43,7 @@ class Auth {
                 // Return early, don't call next if an error occurred
                 return res.status(401).json({ message: data.message });
             }
-
+            console.log('data', data);
             req.user = data.user;
             next();
 
@@ -60,7 +62,7 @@ class Auth {
                 return res.status(401).json({ message: data.message });
             }
 
-            if (data.user.role !== 'superadmin') {
+            if (data.user.role !== 'Super Admin') {
                 return res.status(403).json({ message: 'Unauthorized' });
             }
 
@@ -82,7 +84,7 @@ class Auth {
                 return res.status(401).json({ message: data.message });
             }
 
-            if (data.user.role !== 'admin') {
+            if (data.user.role !== 'Admin') {
                 return res.status(403).json({ message: 'Unauthorized' });
             }
 

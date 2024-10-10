@@ -3,10 +3,10 @@ import KarirController from "../controllers/karirController";
 
 const router = Router();
 
-router.post("/karir", KarirController.create);
-router.get("/karir", KarirController.getAll);
-router.get("/karir/:id", KarirController.getById);
-router.put("/karir/:id", KarirController.update);
-router.delete("/karir/:id", KarirController.delete);
+router.post("/", KarirController.create);
+router.get("/", KarirController.getAll);
+router.get("/:id", KarirController.getById);
+router.put("/:id", KarirController.update);
+router.delete("/:id", KarirController.delete);
 
 export default router;
