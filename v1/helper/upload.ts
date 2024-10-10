@@ -7,8 +7,8 @@ import { Request, Response, NextFunction } from "express";
 dotenv.config();
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
@@ -62,6 +62,6 @@ export const uploadToCloudinary = async (req: Request, res: Response, next: Next
     next();
   } catch (error) {
     console.error('Error in uploadToCloudinary middleware:', error);
-    next(error);
+    return res.status(500).json({ message: 'Error uploading file', error });
   }
 };

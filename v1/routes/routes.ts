@@ -2,6 +2,7 @@ import express from 'express';
 import userRoutes from './user';
 import authRoutes from './auth';
 import Auth from '../middleware/auth';
+import aboutUs from './aboutUs';
 import alumni from './alumni';
 import blog from './blog';
 import dewan from './dewan';
@@ -20,8 +21,9 @@ router.use('/public',publicRoutes);
 
 // Admin
 router.use('/', authRoutes);
-router.use('/',Auth.authOnly,alumni);
-router.use('/',Auth.authOnly,blog);
+router.use('/alumni',Auth.authOnly,alumni);
+router.use('/blog',Auth.authOnly,blog);
+router.use('/about-us',Auth.authOnly,aboutUs);
 router.use('/',Auth.authOnly,dewan);
 router.use('/',Auth.authOnly,footer );
 router.use('/header',Auth.authOnly,header );

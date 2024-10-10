@@ -3,10 +3,10 @@ import { Router } from "express";
 
 const router = Router();
 
-router.post("/alumni", AlumniController.create);
-router.get("/alumni", AlumniController.getAll);
-router.get("/alumni/:id", AlumniController.getById);
-router.put("/alumni/:id", AlumniController.update);
-router.delete("/alumni/:id", AlumniController.delete);
+router.post("/", AlumniController.create);
+router.get("/", AlumniController.getAll);
+router.get("/:id", AlumniController.getById);
+router.put("/:id", AlumniController.update);
+router.delete("/:id", AlumniController.delete);
 
 export default router;
