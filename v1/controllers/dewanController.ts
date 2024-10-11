@@ -16,69 +16,82 @@ class DewanController {
         instagram,
         twitter,
       } = req.body;
-      const dewan = await Dewan.create({
-        image,
-        name,
-        position,
-        description,
-        phone,
-        email,
-        facebook,
-        instagram,
-        twitter,
-      });
+
+      const data: { [key: string]: any } = req.body;
+      const cloudinaryUrls = req.body.cloudinaryUrls;
+
+      // Check if there are any Cloudinary URLs
+      if (cloudinaryUrls?.length === 0) {
+        console.error("No Cloudinary URLs found.");
+        throw new Error("No Cloudinary URLs found.");
+      }
+      if (cloudinaryUrls) {
+        data["image"] = cloudinaryUrls[0];
+      }
+
+      const dewan = await Dewan.create(data);
       res.status(201).json({ message: "Dewan created successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     } finally {
-        return;
-        }
+      return;
+    }
   }
 
-    public static async getAll(req: Request, res: Response): Promise<void> {
-        try {
-        const dewan = await Dewan.findAll();
-        res.status(200).json(dewan);
-        } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
-        } finally {
-        return;
-        }
+  public static async getAll(req: Request, res: Response): Promise<void> {
+    try {
+      const dewan = await Dewan.findAll();
+      res.status(200).json(dewan);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    } finally {
+      return;
     }
+  }
 
-    public static async getById(req: Request, res: Response): Promise<void> {
-        try {
-        const dewan = await Dewan.findByPk(req.params.id);
-        res.status(200).json(dewan);
-        } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
-        } finally {
-            return;
-        }
+  public static async getById(req: Request, res: Response): Promise<void> {
+    try {
+      const dewan = await Dewan.findByPk(req.params.id);
+      res.status(200).json(dewan);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    } finally {
+      return;
     }
+  }
 
-    public static async update(req: Request, res: Response): Promise<void> {
-        try {
-        await Dewan.update(req.body, { where: { id: req.params.id } });
-        res.status(200).json({ message: "Dewan updated successfully" });
-        } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
-        } finally {
-            return;
-        }
+  public static async update(req: Request, res: Response): Promise<void> {
+    try {
+      const data: { [key: string]: any } = req.body;
+      const cloudinaryUrls = req.body.cloudinaryUrls;
+
+      // Check if there are any Cloudinary URLs
+      if (cloudinaryUrls?.length === 0) {
+        console.error("No Cloudinary URLs found.");
+        throw new Error("No Cloudinary URLs found.");
+      }
+      if (cloudinaryUrls) {
+        data["image"] = cloudinaryUrls[0];
+      }
+      await Dewan.update(data, { where: { id: req.params.id } });
+      res.status(200).json({ message: "Dewan updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    } finally {
+      return;
     }
+  }
 
-    public static async delete(req: Request, res: Response): Promise<void> {
-        try {
-        await Dewan.destroy({ where: { id: req.params.id } });
-        res.status(200).json({ message: "Dewan deleted successfully" });
-        } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
-        } finally {
-            return;
-        }
+  public static async delete(req: Request, res: Response): Promise<void> {
+    try {
+      await Dewan.destroy({ where: { id: req.params.id } });
+      res.status(200).json({ message: "Dewan deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    } finally {
+      return;
     }
-
+  }
 }
 
 export default DewanController;

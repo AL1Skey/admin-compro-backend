@@ -5,7 +5,7 @@ interface KarirAttributes {
   end_date: Date;
   title: string;
   description: string;
-  link: string;
+  email: string;
 }
 
 class Karir extends Model<KarirAttributes> implements KarirAttributes {
@@ -13,7 +13,7 @@ class Karir extends Model<KarirAttributes> implements KarirAttributes {
   public end_date!: Date;
   public title!: string;
   public description!: string;
-  public link!: string;
+  public email!: string;
 
   static associate(models: any) {
     // define association here
@@ -27,7 +27,7 @@ export default (sequelize: Sequelize) => {
       end_date: DataTypes.DATE,
       title: DataTypes.STRING,
       description: DataTypes.STRING,
-      link: DataTypes.STRING,
+      email: DataTypes.STRING,
     },
     {
       sequelize,

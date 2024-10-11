@@ -35,7 +35,7 @@ export default (sequelize: Sequelize) => {
       image: DataTypes.STRING,
       phone: DataTypes.STRING,
       jobs: DataTypes.STRING,
-      angkatan: DataTypes.STRING,
+      angkatan: DataTypes.INTEGER,
       jurusan: DataTypes.STRING,
       approval: DataTypes.BOOLEAN,
     },

@@ -45,6 +45,7 @@ class Auth {
             }
             console.log('data', data);
             req.user = data.user;
+            console.log("GOTO NEXT >>>>>>><<<<<<<<<<<<<<");
             next();
 
         } catch (err) {

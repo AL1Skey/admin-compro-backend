@@ -21,7 +21,7 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      link: {
+      email: {
         type: Sequelize.STRING
       },
       createdAt: {

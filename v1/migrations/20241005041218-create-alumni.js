@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       angkatan: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       jurusan: {
         type: Sequelize.STRING
