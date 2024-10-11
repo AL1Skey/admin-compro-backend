@@ -9,6 +9,7 @@ interface AlumniAttributes {
   angkatan: string;
   jurusan: string;
   approval: boolean;
+  isShown: boolean;
 }
 
 class Alumni extends Model<AlumniAttributes> {
@@ -21,6 +22,7 @@ class Alumni extends Model<AlumniAttributes> {
   public angkatan!: string;
   public jurusan!: string;
   public approval!: boolean;
+  public isShown!: boolean;
 
   public static associate(models: any) {
     // define association here
@@ -38,6 +40,7 @@ export default (sequelize: Sequelize) => {
       angkatan: DataTypes.INTEGER,
       jurusan: DataTypes.STRING,
       approval: DataTypes.BOOLEAN,
+      isShown: DataTypes.BOOLEAN,
     },
     {
       sequelize,

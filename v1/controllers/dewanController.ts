@@ -30,6 +30,7 @@ class DewanController {
       }
 
       const dewan = await Dewan.create(data);
+      //RESPONSE NEEED TO BE 203
       res.status(201).json({ message: "Dewan created successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -73,8 +74,9 @@ class DewanController {
       if (cloudinaryUrls) {
         data["image"] = cloudinaryUrls[0];
       }
+      console.log(data);
       await Dewan.update(data, { where: { id: req.params.id } });
-      res.status(200).json({ message: "Dewan updated successfully" });
+      res.status(203).json({ message: "Dewan updated successfully" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     } finally {

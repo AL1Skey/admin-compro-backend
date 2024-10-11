@@ -5,17 +5,20 @@ class PengurusController {
   public static async create(req: Request, res: Response): Promise<void> {
     try {
       const { image, name, position, description, phone, email, facebook, instagram, twitter } = req.body;
-      const pengurus = await Pengurus.create({
-        image,
-        name,
-        position,
-        description,
-        phone,
-        email,
-        facebook,
-        instagram,
-        twitter,
-      });
+      const data:{[key:string]:any} = req.body;
+
+      const cloudinaryUrls = req.body.cloudinaryUrls;
+
+      // Check if there are any Cloudinary URLs
+      if (cloudinaryUrls?.length === 0) {
+        console.error("No Cloudinary URLs found.");
+        throw new Error("No Cloudinary URLs found.");
+      }
+      if (cloudinaryUrls) {
+        data["image"] = cloudinaryUrls[0];
+      }
+
+      const pengurus = await Pengurus.create(data);
       res.status(201).json({ message: 'Pengurus created successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
@@ -48,7 +51,19 @@ class PengurusController {
 
   public static async update(req: Request, res: Response): Promise<void> {
     try {
-      await Pengurus.update(req.body, { where: { id: req.params.id } });
+      const data:{[key:string]:any} = req.body;
+
+      const cloudinaryUrls = req.body.cloudinaryUrls;
+
+      // Check if there are any Cloudinary URLs
+      if (cloudinaryUrls?.length === 0) {
+        console.error("No Cloudinary URLs found.");
+        throw new Error("No Cloudinary URLs found.");
+      }
+      if (cloudinaryUrls) {
+        data["image"] = cloudinaryUrls[0];
+      }
+      await Pengurus.update(data, { where: { id: req.params.id } });
       res.status(200).json({ message: 'Pengurus updated successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });

@@ -33,17 +33,17 @@ class KarirController {
     try {
       const karir = await Karir.findAll();
 
-      const formattedKarir = karir.map((b: any) => {
+      const formattedKarir = karir ? karir.map((b: any) => {
         const formattedData = { ...b.dataValues };
         if (formattedData.end_date instanceof Date) {
           formattedData.end_date = formattedData.end_date.toDateString();
         }
         return formattedData;
-      });
+      }) : [];
 
       res.status(200).json(formattedKarir);
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error In COntroller",error });
     } finally {
       return;
     }

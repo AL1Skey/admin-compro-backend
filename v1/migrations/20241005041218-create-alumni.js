@@ -33,6 +33,9 @@ module.exports = {
       approval: {
         type: Sequelize.BOOLEAN
       },
+      isShown: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

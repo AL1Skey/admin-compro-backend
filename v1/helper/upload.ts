@@ -30,9 +30,9 @@ export const uploadToCloudinary = async (req: Request, res: Response, next: Next
       // Multiple file upload
       files = req.files as CloudinaryFile[];
     }
-
-    if (files.length === 0) {
-      next();
+    else{
+      console.log("No files found");
+      next()
     }
 
     const cloudinaryUrls: string[] = [];

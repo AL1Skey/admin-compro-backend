@@ -63,7 +63,7 @@ class Auth {
                 return res.status(401).json({ message: data.message });
             }
 
-            if (data.user.role !== 'Super Admin') {
+            if (data.user.role !== 'Super Admin' || data.user.role <= 1) {
                 return res.status(403).json({ message: 'Unauthorized' });
             }
 
@@ -85,7 +85,7 @@ class Auth {
                 return res.status(401).json({ message: data.message });
             }
 
-            if (data.user.role !== 'Admin') {
+            if (data.user.role !== 'Admin' || data.user.role <= 1) {
                 return res.status(403).json({ message: 'Unauthorized' });
             }
 
