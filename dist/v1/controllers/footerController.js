@@ -133,3 +133,4 @@ class FooterController {
     }
 }
 exports.default = FooterController;
+//# sourceMappingURL=footerController.js.map

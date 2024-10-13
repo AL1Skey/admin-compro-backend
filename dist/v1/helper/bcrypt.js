@@ -13,3 +13,4 @@ const comparePassword = (password, hash) => {
     return bcrypt_1.default.compareSync(password, hash);
 };
 exports.comparePassword = comparePassword;
+//# sourceMappingURL=bcrypt.js.map

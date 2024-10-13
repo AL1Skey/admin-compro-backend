@@ -21,3 +21,4 @@ const verifyToken = (token) => {
     return jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
 };
 exports.verifyToken = verifyToken;
+//# sourceMappingURL=jwt.js.map

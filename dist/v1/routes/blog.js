@@ -13,3 +13,4 @@ router.get("/:id", blogController_1.default.getById);
 router.put("/:id", upload_1.upload.single('image'), upload_1.uploadToCloudinary, blogController_1.default.update);
 router.delete("/:id", blogController_1.default.delete);
 exports.default = router;
+//# sourceMappingURL=blog.js.map

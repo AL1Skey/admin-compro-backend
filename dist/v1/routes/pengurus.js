@@ -13,3 +13,4 @@ router.get("/:id", pengurusController_1.default.getById);
 router.put("/:id", upload_1.upload.single('image'), upload_1.uploadToCloudinary, pengurusController_1.default.update);
 router.delete("/:id", pengurusController_1.default.delete);
 exports.default = router;
+//# sourceMappingURL=pengurus.js.map

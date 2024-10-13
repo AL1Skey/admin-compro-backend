@@ -12,3 +12,4 @@ router.get('/:id', userController_1.default.getById);
 router.put('/:id', userController_1.default.update);
 router.delete('/:id', userController_1.default.delete);
 exports.default = router;
+//# sourceMappingURL=user.js.map

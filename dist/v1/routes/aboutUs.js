@@ -10,3 +10,4 @@ const router = (0, express_1.Router)();
 router.get("/", aboutUsController_1.default.get);
 router.put("/", upload_1.upload.single('image'), upload_1.uploadToCloudinary, aboutUsController_1.default.update);
 exports.default = router;
+//# sourceMappingURL=aboutUs.js.map

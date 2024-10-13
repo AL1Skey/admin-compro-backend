@@ -189,3 +189,4 @@ class AlumniController {
     }
 }
 exports.default = AlumniController;
+//# sourceMappingURL=alumniController.js.map

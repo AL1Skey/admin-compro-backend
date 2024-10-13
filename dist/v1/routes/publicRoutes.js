@@ -34,3 +34,4 @@ router.get('/pengurus', pengurusController_1.default.getAll);
 router.get('/pengurus/:id', pengurusController_1.default.getById);
 // router.use('/', cmsRoutes);
 exports.default = router;
+//# sourceMappingURL=publicRoutes.js.map

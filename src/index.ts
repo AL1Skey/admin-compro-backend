@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from '../v1/routes/routes';
+import routes from './v1/routes/routes';
 import { configDotenv } from 'dotenv';
 import cors from 'cors';
 const app = express();

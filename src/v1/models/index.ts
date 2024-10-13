@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { Sequelize, DataTypes } from 'sequelize';
 import process from 'process';
+import mysql from 'mysql2';
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -19,7 +20,7 @@ const db: DbInterface = {} as DbInterface;
 
 let sequelize: Sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable] as string, config);
+  sequelize = new Sequelize(process.env[config.use_env_variable] as string, {...config,dialectModule: mysql});
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }

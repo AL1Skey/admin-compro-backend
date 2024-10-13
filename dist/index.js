@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const routes_1 = __importDefault(require("../v1/routes/routes"));
+const routes_1 = __importDefault(require("./v1/routes/routes"));
 const dotenv_1 = require("dotenv");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
@@ -24,3 +24,4 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 exports.default = app;
+//# sourceMappingURL=index.js.map

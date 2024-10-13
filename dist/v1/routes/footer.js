@@ -14,3 +14,4 @@ router.delete("/:id", footerController_1.default.delete);
 router.get("/one", footerController_1.default.getOne);
 // router.put("/one", FooterController.updateOne);
 exports.default = router;
+//# sourceMappingURL=footer.js.map

@@ -33,3 +33,4 @@ router.use('/pengurus', auth_2.default.authOnly, pengurus_1.default);
 // router.use('/', cmsRoutes);
 router.use('/users', auth_2.default.superAdmin, user_1.default);
 exports.default = router;
+//# sourceMappingURL=routes.js.map

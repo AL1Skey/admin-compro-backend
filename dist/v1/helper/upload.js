@@ -65,3 +65,4 @@ const uploadToCloudinary = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.uploadToCloudinary = uploadToCloudinary;
+//# sourceMappingURL=upload.js.map

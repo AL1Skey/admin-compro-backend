@@ -110,3 +110,4 @@ class DewanController {
     }
 }
 exports.default = DewanController;
+//# sourceMappingURL=dewanController.js.map

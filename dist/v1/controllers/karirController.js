@@ -121,3 +121,4 @@ class KarirController {
     }
 }
 exports.default = KarirController;
+//# sourceMappingURL=karirController.js.map
