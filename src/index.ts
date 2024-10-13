@@ -3,7 +3,7 @@ import routes from './v1/routes/routes';
 import { configDotenv } from 'dotenv';
 import cors from 'cors';
 const app = express();
-const port = 3655;
+const port = 3000;
 
 configDotenv();
 

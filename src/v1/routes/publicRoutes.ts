@@ -8,6 +8,7 @@ import KarirController from '../controllers/karirController';
 import PengurusController from '../controllers/pengurusController';
 import UserController from '../controllers/userController';
 import AboutUsController from '../controllers/aboutUsController';
+import JurusanController from '../controllers/jurusanController';
 // import cmsRoutes from './cms';
 
 const router = express.Router();
@@ -19,6 +20,9 @@ router.get("/about-us", AboutUsController.get);
 
 router.get('/alumni', AlumniController.getAll);
 router.get('/alumni/:id', AlumniController.getById);
+
+router.get('/jurusan', JurusanController.getAll);
+router.get('/jurusan/:id', JurusanController.getById);
 
 router.get('/blog', BlogController.getAll);
 router.get('/blog/:id', BlogController.getById);

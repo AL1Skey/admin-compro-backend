@@ -13,6 +13,7 @@ const karirController_1 = __importDefault(require("../controllers/karirControlle
 const pengurusController_1 = __importDefault(require("../controllers/pengurusController"));
 const userController_1 = __importDefault(require("../controllers/userController"));
 const aboutUsController_1 = __importDefault(require("../controllers/aboutUsController"));
+const jurusanController_1 = __importDefault(require("../controllers/jurusanController"));
 // import cmsRoutes from './cms';
 const router = express_1.default.Router();
 // Public routes
@@ -20,6 +21,8 @@ router.get('/user', userController_1.default.getOne);
 router.get("/about-us", aboutUsController_1.default.get);
 router.get('/alumni', alumniController_1.default.getAll);
 router.get('/alumni/:id', alumniController_1.default.getById);
+router.get('/jurusan', jurusanController_1.default.getAll);
+router.get('/jurusan/:id', jurusanController_1.default.getById);
 router.get('/blog', blogController_1.default.getAll);
 router.get('/blog/:id', blogController_1.default.getById);
 router.get('/dewan', dewanController_1.default.getAll);

@@ -7,7 +7,7 @@ interface AlumniAttributes {
   phone: string;
   jobs: string;
   angkatan: string;
-  jurusan: string;
+  jurusan: number;
   approval: boolean;
   isShown: boolean;
 }
@@ -20,7 +20,7 @@ class Alumni extends Model<AlumniAttributes> {
   public phone!: string;
   public jobs!: string;
   public angkatan!: string;
-  public jurusan!: string;
+  public jurusan!: number;
   public approval!: boolean;
   public isShown!: boolean;
 
@@ -38,7 +38,7 @@ export default (sequelize: Sequelize) => {
       phone: DataTypes.STRING,
       jobs: DataTypes.STRING,
       angkatan: DataTypes.INTEGER,
-      jurusan: DataTypes.STRING,
+      jurusan: DataTypes.INTEGER,
       approval: DataTypes.BOOLEAN,
       isShown: DataTypes.BOOLEAN,
     },

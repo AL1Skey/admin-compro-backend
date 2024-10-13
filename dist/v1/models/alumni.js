@@ -14,7 +14,7 @@ exports.default = (sequelize) => {
         phone: sequelize_1.DataTypes.STRING,
         jobs: sequelize_1.DataTypes.STRING,
         angkatan: sequelize_1.DataTypes.INTEGER,
-        jurusan: sequelize_1.DataTypes.STRING,
+        jurusan: sequelize_1.DataTypes.INTEGER,
         approval: sequelize_1.DataTypes.BOOLEAN,
         isShown: sequelize_1.DataTypes.BOOLEAN,
     }, {

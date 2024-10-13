@@ -8,7 +8,7 @@ const routes_1 = __importDefault(require("./v1/routes/routes"));
 const dotenv_1 = require("dotenv");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const port = 3655;
+const port = 3000;
 (0, dotenv_1.configDotenv)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));

@@ -9,6 +9,7 @@ const auth_1 = __importDefault(require("./auth"));
 const auth_2 = __importDefault(require("../middleware/auth"));
 const aboutUs_1 = __importDefault(require("./aboutUs"));
 const alumni_1 = __importDefault(require("./alumni"));
+const jurusan_1 = __importDefault(require("./jurusan"));
 const blog_1 = __importDefault(require("./blog"));
 const dewan_1 = __importDefault(require("./dewan"));
 const footer_1 = __importDefault(require("./footer"));
@@ -23,6 +24,7 @@ router.use('/public', publicRoutes_1.default);
 // Admin
 router.use('/', auth_1.default);
 router.use('/alumni', auth_2.default.authOnly, alumni_1.default);
+router.use('/jurusan', auth_2.default.authOnly, jurusan_1.default);
 router.use('/blog', auth_2.default.authOnly, blog_1.default);
 router.use('/about-us', auth_2.default.authOnly, aboutUs_1.default);
 router.use('/dewan', auth_2.default.authOnly, dewan_1.default);

@@ -1,7 +1,8 @@
 import db from '../models';
+import sequelize from 'sequelize';
 import { Request, Response } from 'express';
 const Alumni = db.Alumni;
-
+const Jurusan = db.Jurusan;
 class AlumniController {
     public static async create(req: Request, res: Response): Promise<void> {
         try {
@@ -34,14 +35,37 @@ class AlumniController {
             }
             let condition:{[key:string]:any} = {}
             if(req.query){
+                let query:any[] = [];
                 if (req.query.approval) {
-                    condition['where'] = { approval: req.query.approval==='true' };
+                    query.push({ approval: req.query.approval==='true' });
                 }
-                
+                if(req.query.isShown){
+                    query.push({ isShown: req.query.isShown==='true' });
+                }
+                condition["where"] = { [sequelize.Op.and]: query };
             }
-            const alumni = await Alumni.findAll(condition);
+            const response = await Alumni.findAll(condition);
+            const alumni = response ? await Promise.all(response?.map(async (alumnus: any) => {
+                const formattedData = { ...alumnus.dataValues };
+                console.log(formattedData);
+                const jurusan = await Jurusan.findByPk(formattedData.jurusan);
+                return {
+                  id: formattedData.id,
+                  name: formattedData.name,
+                  email: formattedData.email,
+                  image: formattedData.image,
+                  phone: formattedData.phone,
+                  jobs: formattedData.jobs,
+                  angkatan: formattedData.angkatan,
+                  jurusan: jurusan?.name ?? formattedData.jurusan,
+                  approval: formattedData.approval,
+                  isShown: formattedData.isShown,
+                };
+              })) : [];
+            
+              console.log(alumni);
             let result:any;
-            if(alumni.length === 0 || alumni === null) {
+            if(alumni?.length === 0 || alumni === null) {
                 res.status(404).json([]);
                 return;
             }

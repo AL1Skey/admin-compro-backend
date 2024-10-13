@@ -4,6 +4,7 @@ import authRoutes from './auth';
 import Auth from '../middleware/auth';
 import aboutUs from './aboutUs';
 import alumni from './alumni';
+import jurusan from './jurusan';
 import blog from './blog';
 import dewan from './dewan';
 import footer from './footer';
@@ -22,6 +23,7 @@ router.use('/public',publicRoutes);
 // Admin
 router.use('/', authRoutes);
 router.use('/alumni',Auth.authOnly,alumni);
+router.use('/jurusan',Auth.authOnly,jurusan);
 router.use('/blog',Auth.authOnly,blog);
 router.use('/about-us',Auth.authOnly,aboutUs);
 router.use('/dewan',Auth.authOnly,dewan);

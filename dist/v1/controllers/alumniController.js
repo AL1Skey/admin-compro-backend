@@ -13,7 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = __importDefault(require("../models"));
+const sequelize_1 = __importDefault(require("sequelize"));
 const Alumni = models_1.default.Alumni;
+const Jurusan = models_1.default.Jurusan;
 class AlumniController {
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -47,13 +49,37 @@ class AlumniController {
                 }
                 let condition = {};
                 if (req.query) {
+                    let query = [];
                     if (req.query.approval) {
-                        condition['where'] = { approval: req.query.approval === 'true' };
+                        query.push({ approval: req.query.approval === 'true' });
                     }
+                    if (req.query.isShown) {
+                        query.push({ isShown: req.query.isShown === 'true' });
+                    }
+                    condition["where"] = { [sequelize_1.default.Op.and]: query };
                 }
-                const alumni = yield Alumni.findAll(condition);
+                const response = yield Alumni.findAll(condition);
+                const alumni = response ? yield Promise.all(response === null || response === void 0 ? void 0 : response.map((alumnus) => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
+                    const formattedData = Object.assign({}, alumnus.dataValues);
+                    console.log(formattedData);
+                    const jurusan = yield Jurusan.findByPk(formattedData.jurusan);
+                    return {
+                        id: formattedData.id,
+                        name: formattedData.name,
+                        email: formattedData.email,
+                        image: formattedData.image,
+                        phone: formattedData.phone,
+                        jobs: formattedData.jobs,
+                        angkatan: formattedData.angkatan,
+                        jurusan: (_a = jurusan === null || jurusan === void 0 ? void 0 : jurusan.name) !== null && _a !== void 0 ? _a : formattedData.jurusan,
+                        approval: formattedData.approval,
+                        isShown: formattedData.isShown,
+                    };
+                }))) : [];
+                console.log(alumni);
                 let result;
-                if (alumni.length === 0 || alumni === null) {
+                if ((alumni === null || alumni === void 0 ? void 0 : alumni.length) === 0 || alumni === null) {
                     res.status(404).json([]);
                     return;
                 }
