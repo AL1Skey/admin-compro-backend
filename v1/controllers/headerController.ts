@@ -27,6 +27,7 @@ class HeaderController {
   public static async getAll(req: Request, res: Response): Promise<void> {
     try {
       const header = await Header.findAll();
+      /*
       const filteredHeaders = header.map((h: any) => {
         return {
           id: h.id,
@@ -35,8 +36,9 @@ class HeaderController {
           description: h.description,
         };
       });
+      */
       console.log(header, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-      res.status(200).json(filteredHeaders);
+      res.status(200).json(header);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     } finally {

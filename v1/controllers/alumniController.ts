@@ -33,12 +33,56 @@ class AlumniController {
                 throw new Error('Alumni model is not defined');
             }
             let condition:{[key:string]:any} = {}
-            if (req.query.approval) {
-                condition['where'] = { approval: req.query.approval==='true' };
+            if(req.query){
+                if (req.query.approval) {
+                    condition['where'] = { approval: req.query.approval==='true' };
+                }
+                
             }
             const alumni = await Alumni.findAll(condition);
+            let result:any;
             if(alumni.length === 0 || alumni === null) {
                 res.status(404).json([]);
+                return;
+            }
+            if(req.query){
+                if(req.query.reformat){
+                    const groupedData = alumni.reduce((acc:any, current:any) => {
+                        const angkatan = current.angkatan;
+                        if (!acc[angkatan]) {
+                          acc[angkatan] = [];
+                        }
+                        acc[angkatan].push(current);
+                        return acc;
+                      }, {});
+                    
+                    result = Object.keys(groupedData).map((angkatan) => {
+                        const alumnus = groupedData[angkatan];
+                        const total = alumnus.length;
+                        const jurusan = alumnus.reduce((acc:any, current:any) => {
+                          const jurusanName = current.jurusan;
+                          if (!acc[jurusanName]) {
+                            acc[jurusanName] = {
+                              Jurusan: jurusanName,
+                              Alumni: [],
+                              total: 0,
+                            };
+                          }
+                          acc[jurusanName].Alumni.push(current.name);
+                          acc[jurusanName].total++;
+                          return acc;
+                        }, {});
+                      
+                        return {
+                          angkatan: parseInt(angkatan, 10),
+                          total,
+                          alumni: Object.values(jurusan),
+                        };
+                      });
+                }
+            }
+            if(result){
+                res.status(200).json(result);
                 return;
             }
             res.status(200).json(alumni);

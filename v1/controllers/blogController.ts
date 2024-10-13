@@ -31,6 +31,7 @@ class BlogController{
     public static async getAll(req: Request, res: Response): Promise<void>{
         try {
             const blog = await Blog.findAll();
+            let result:any;
             const formattedBlogs = blog.map((b: any) => {
                 const formattedData = { ...b.dataValues };
                 if (formattedData.createAt instanceof Date) {
@@ -38,8 +39,26 @@ class BlogController{
                 }
                 return formattedData;
             });
+            if(req.query){
+                if(req.query.reformat){
+                    result = formattedBlogs.map((item:any) => {
+                        return {
+                          id: item.id,
+                          title: item.title,
+                          img: item.image,
+                          category: item.category,
+                          author: item.author,
+                          date: new Date(item.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+                          content: item.description,
+                        };
+                      });
+                }
+            }
+            if(result){
+                res.status(200).json(result);
+            }else{
             res.status(200).json(formattedBlogs);
-
+            }
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
         } finally {
@@ -50,8 +69,27 @@ class BlogController{
     public static async getById(req: Request, res: Response): Promise<void>{
         try {
             const blog = await Blog.findByPk(req.params.id);
+            let result:any;
+            if(req.query){
+                if(req.query.reformat){
+                    result = {
+                        id: blog.id,
+                        title: blog.title,
+                        img: blog.image,
+                        category: blog.category,
+                        author: blog.author,
+                        date: new Date(blog.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+                        content: blog.description,
+                      }
+                }
+            }
             blog.createAt = blog.createAt.toDateString()
+            if(result){
+                res.status(200).json(result);
+            }
+            else{
             res.status(200).json(blog);
+            }
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
         } finally {
