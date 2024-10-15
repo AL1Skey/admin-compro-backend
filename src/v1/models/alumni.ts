@@ -6,6 +6,7 @@ interface AlumniAttributes {
   image: string;
   phone: string;
   jobs: string;
+  company: string;
   angkatan: string;
   jurusan: number;
   approval: boolean;
@@ -19,6 +20,7 @@ class Alumni extends Model<AlumniAttributes> {
   public image!: string;
   public phone!: string;
   public jobs!: string;
+  public company!: string;
   public angkatan!: string;
   public jurusan!: number;
   public approval!: boolean;
@@ -37,6 +39,7 @@ export default (sequelize: Sequelize) => {
       image: DataTypes.STRING,
       phone: DataTypes.STRING,
       jobs: DataTypes.STRING,
+      company: DataTypes.STRING,
       angkatan: DataTypes.INTEGER,
       jurusan: DataTypes.INTEGER,
       approval: DataTypes.BOOLEAN,

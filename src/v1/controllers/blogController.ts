@@ -52,6 +52,17 @@ class BlogController{
                           content: item.description,
                         };
                       });
+                    const categorizedBlogs: {[key: string]: any[]} = {};
+
+                    result.forEach((item: any) => {
+                        const category = item.category;
+                        if (!categorizedBlogs[category]) {
+                            categorizedBlogs[category] = [];
+                        }
+                        categorizedBlogs[category].push(item);
+                    });
+                    result = categorizedBlogs;
+                    console.log(result['Blog']);
                 }
             }
             if(result){

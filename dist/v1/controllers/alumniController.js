@@ -58,7 +58,7 @@ class AlumniController {
                     }
                     condition["where"] = { [sequelize_1.default.Op.and]: query };
                 }
-                const response = yield Alumni.findAll(condition);
+                const response = yield Alumni.findAll(condition, { order: [['angkatan', 'DESC']] });
                 const alumni = response ? yield Promise.all(response === null || response === void 0 ? void 0 : response.map((alumnus) => __awaiter(this, void 0, void 0, function* () {
                     var _a;
                     const formattedData = Object.assign({}, alumnus.dataValues);
@@ -93,7 +93,9 @@ class AlumniController {
                             acc[angkatan].push(current);
                             return acc;
                         }, {});
-                        result = Object.keys(groupedData).map((angkatan) => {
+                        result = Object.keys(groupedData)
+                            .sort((a, b) => parseInt(b, 10) - parseInt(a, 10)) // Sort by angkatan descending
+                            .map((angkatan) => {
                             const alumnus = groupedData[angkatan];
                             const total = alumnus.length;
                             const jurusan = alumnus.reduce((acc, current) => {

@@ -24,6 +24,9 @@ module.exports = {
       jobs: {
         type: Sequelize.STRING
       },
+      company: {
+        type: Sequelize.STRING
+      },
       angkatan: {
         type: Sequelize.INTEGER
       },

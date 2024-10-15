@@ -44,7 +44,7 @@ class AlumniController {
                 }
                 condition["where"] = { [sequelize.Op.and]: query };
             }
-            const response = await Alumni.findAll(condition);
+            const response = await Alumni.findAll(condition, { order: [['angkatan', 'DESC']] });
             const alumni = response ? await Promise.all(response?.map(async (alumnus: any) => {
                 const formattedData = { ...alumnus.dataValues };
                 console.log(formattedData);
@@ -74,35 +74,37 @@ class AlumniController {
                     const groupedData = alumni.reduce((acc:any, current:any) => {
                         const angkatan = current.angkatan;
                         if (!acc[angkatan]) {
-                          acc[angkatan] = [];
+                            acc[angkatan] = [];
                         }
                         acc[angkatan].push(current);
                         return acc;
-                      }, {});
-                    
-                    result = Object.keys(groupedData).map((angkatan) => {
-                        const alumnus = groupedData[angkatan];
-                        const total = alumnus.length;
-                        const jurusan = alumnus.reduce((acc:any, current:any) => {
-                          const jurusanName = current.jurusan;
-                          if (!acc[jurusanName]) {
-                            acc[jurusanName] = {
-                              Jurusan: jurusanName,
-                              Alumni: [],
-                              total: 0,
+                    }, {});
+
+                    result = Object.keys(groupedData)
+                        .sort((a, b) => parseInt(b, 10) - parseInt(a, 10)) // Sort by angkatan descending
+                        .map((angkatan) => {
+                            const alumnus = groupedData[angkatan];
+                            const total = alumnus.length;
+                            const jurusan = alumnus.reduce((acc:any, current:any) => {
+                                const jurusanName = current.jurusan;
+                                if (!acc[jurusanName]) {
+                                    acc[jurusanName] = {
+                                        Jurusan: jurusanName,
+                                        Alumni: [],
+                                        total: 0,
+                                    };
+                                }
+                                acc[jurusanName].Alumni.push(current.name);
+                                acc[jurusanName].total++;
+                                return acc;
+                            }, {});
+
+                            return {
+                                angkatan: parseInt(angkatan, 10),
+                                total,
+                                alumni: Object.values(jurusan),
                             };
-                          }
-                          acc[jurusanName].Alumni.push(current.name);
-                          acc[jurusanName].total++;
-                          return acc;
-                        }, {});
-                      
-                        return {
-                          angkatan: parseInt(angkatan, 10),
-                          total,
-                          alumni: Object.values(jurusan),
-                        };
-                      });
+                        });
                 }
             }
             if(result){

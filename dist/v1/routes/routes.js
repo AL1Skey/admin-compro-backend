@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("./user"));
+const excelImport_1 = __importDefault(require("./excelImport"));
 const auth_1 = __importDefault(require("./auth"));
 const auth_2 = __importDefault(require("../middleware/auth"));
 const aboutUs_1 = __importDefault(require("./aboutUs"));
@@ -21,6 +22,7 @@ const publicRoutes_1 = __importDefault(require("./publicRoutes"));
 const router = express_1.default.Router();
 // Public
 router.use('/public', publicRoutes_1.default);
+router.use('/excel', excelImport_1.default);
 // Admin
 router.use('/', auth_1.default);
 router.use('/alumni', auth_2.default.authOnly, alumni_1.default);

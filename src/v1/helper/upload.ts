@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 import multer, { Multer } from 'multer';
 import { v2 as cloudinary, UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 // import sharp from 'sharp';
+import * as XLSX from 'xlsx';
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
@@ -33,6 +34,7 @@ export const uploadToCloudinary = async (req: Request, res: Response, next: Next
     else{
       console.log("No files found");
       next()
+      return
     }
 
     const cloudinaryUrls: string[] = [];
@@ -58,8 +60,33 @@ export const uploadToCloudinary = async (req: Request, res: Response, next: Next
 
     req.body.cloudinaryUrls = cloudinaryUrls;
     next();
+    return;
   } catch (error) {
     console.error('Error in uploadToCloudinary middleware:', error);
+    return res.status(500).json({ message: 'Error uploading file', error });
+  }
+};
+
+export const uploadExcel = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) {
+      console.log("No file uploaded");
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    if (req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      console.log("Invalid file type");
+      return res.status(400).json({ message: 'Invalid file type' });
+    }
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[1];
+    const worksheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
+    // console.log(data); 
+    req.body.data = data
+    next();
+  } catch (error) {
+    console.error('Error in uploadExcel middleware:', error);
     return res.status(500).json({ message: 'Error uploading file', error });
   }
 };

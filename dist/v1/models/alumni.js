@@ -13,6 +13,7 @@ exports.default = (sequelize) => {
         image: sequelize_1.DataTypes.STRING,
         phone: sequelize_1.DataTypes.STRING,
         jobs: sequelize_1.DataTypes.STRING,
+        company: sequelize_1.DataTypes.STRING,
         angkatan: sequelize_1.DataTypes.INTEGER,
         jurusan: sequelize_1.DataTypes.INTEGER,
         approval: sequelize_1.DataTypes.BOOLEAN,

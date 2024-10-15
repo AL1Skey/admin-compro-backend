@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './user';
+import excelImport from './excelImport';
 import authRoutes from './auth';
 import Auth from '../middleware/auth';
 import aboutUs from './aboutUs';
@@ -18,6 +19,7 @@ const router = express.Router();
 
 // Public
 router.use('/public',publicRoutes);
+router.use('/excel',excelImport);
 
 
 // Admin
