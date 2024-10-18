@@ -13,6 +13,7 @@ import karir from './karir';
 import header from './header';
 import pengurus from './pengurus';
 import publicRoutes from './publicRoutes';
+import UserController from '../controllers/userController';
 // import cmsRoutes from './cms';
 
 const router = express.Router();
@@ -24,6 +25,10 @@ router.use('/excel',excelImport);
 
 // Admin
 router.use('/', authRoutes);
+
+router.get('/self',Auth.authOnly, UserController.getSelf );
+router.put('/self',Auth.authOnly, UserController.updateSelf );
+
 router.use('/alumni',Auth.authOnly,alumni);
 router.use('/jurusan',Auth.authOnly,jurusan);
 router.use('/blog',Auth.authOnly,blog);

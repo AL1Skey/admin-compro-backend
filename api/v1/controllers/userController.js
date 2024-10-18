@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = __importDefault(require("../models"));
 const bcrypt_1 = require("../helper/bcrypt");
 const User = models_1.default.User;
+const ForgotPassword = models_1.default.ForgotPassword;
 class UserController {
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -68,6 +69,20 @@ class UserController {
             }
         });
     }
+    static getSelf(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield User.findByPk(req.user.id);
+                res.status(200).json(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error' });
+            }
+            finally {
+                return;
+            }
+        });
+    }
     static getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -96,6 +111,20 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield User.update(req.body, { where: { id: req.params.id } });
+                res.status(200).json({ message: 'User updated successfully' });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error' });
+            }
+            finally {
+                return;
+            }
+        });
+    }
+    static updateSelf(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield User.update(req.body, { where: { id: req.user.id } });
                 res.status(200).json({ message: 'User updated successfully' });
             }
             catch (error) {

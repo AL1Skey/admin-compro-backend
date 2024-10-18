@@ -2,7 +2,13 @@
 import { Request, Response } from 'express';
 import db from '../models';
 import { hashPassword } from '../helper/bcrypt';
+import sendResetEmail from '../helper/mailer';
 const User = db.User;
+const ForgotPassword = db.ForgotPassword;
+
+interface AuthenticatedRequest extends Request {
+    user?: any;
+}
 class UserController{
 
     public static async create(req: Request, res: Response): Promise<void>{
@@ -49,6 +55,16 @@ class UserController{
             return;
         }
     }
+    public static async getSelf(req: AuthenticatedRequest, res: Response): Promise<void>{
+        try {
+            const user = await User.findByPk(req.user.id);
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
+        }
+    }
 
     public static async getOne(req: Request, res: Response): Promise<void>{
         try {
@@ -82,6 +98,17 @@ class UserController{
         }
     }
 
+    public static async updateSelf(req: AuthenticatedRequest, res: Response): Promise<void>{
+        try {
+            await User.update(req.body, { where: { id: req.user.id } });
+            res.status(200).json({ message: 'User updated successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Internal server error' });
+        } finally{
+            return;
+        }
+    }
+
     public static async delete(req: Request, res: Response): Promise<void>{
         try {
             await User.destroy({ where: { id: req.params.id } });
@@ -92,6 +119,9 @@ class UserController{
             return;
         }
     }
+
+    
+
 }
 
 export default UserController;

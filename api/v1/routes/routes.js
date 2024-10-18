@@ -18,6 +18,7 @@ const karir_1 = __importDefault(require("./karir"));
 const header_1 = __importDefault(require("./header"));
 const pengurus_1 = __importDefault(require("./pengurus"));
 const publicRoutes_1 = __importDefault(require("./publicRoutes"));
+const userController_1 = __importDefault(require("../controllers/userController"));
 // import cmsRoutes from './cms';
 const router = express_1.default.Router();
 // Public
@@ -25,6 +26,8 @@ router.use('/public', publicRoutes_1.default);
 router.use('/excel', excelImport_1.default);
 // Admin
 router.use('/', auth_1.default);
+router.get('/self', auth_2.default.authOnly, userController_1.default.getSelf);
+router.put('/self', auth_2.default.authOnly, userController_1.default.updateSelf);
 router.use('/alumni', auth_2.default.authOnly, alumni_1.default);
 router.use('/jurusan', auth_2.default.authOnly, jurusan_1.default);
 router.use('/blog', auth_2.default.authOnly, blog_1.default);

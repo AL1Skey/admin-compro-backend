@@ -21,6 +21,7 @@ router.get('/user', userController_1.default.getOne);
 router.get("/about-us", aboutUsController_1.default.get);
 router.get('/alumni', alumniController_1.default.getAll);
 router.get('/alumni/:id', alumniController_1.default.getById);
+router.post('/alumni', alumniController_1.default.alumniRequest);
 router.get('/jurusan', jurusanController_1.default.getAll);
 router.get('/jurusan/:id', jurusanController_1.default.getById);
 router.get('/blog', blogController_1.default.getAll);

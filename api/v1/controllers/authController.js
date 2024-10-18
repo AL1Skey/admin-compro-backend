@@ -17,9 +17,11 @@ const jwt_1 = require("../helper/jwt");
 const models_1 = __importDefault(require("../models"));
 const User = models_1.default.User;
 const Role = models_1.default.Role;
+const ForgotPassword = models_1.default.ForgotPassword;
 class AuthController {
     static login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c, _d;
             try {
                 const { email, password } = req.body;
                 const user = yield User.findOne({ where: { email } });
@@ -32,13 +34,18 @@ class AuthController {
                     res.status(401).json({ message: 'Invalid credentials' });
                     return;
                 }
-                const role = yield Role.findOne({ where: { value: user.role } });
+                const [role, created] = yield Role.findOrCreate({ where: { value: user.role },
+                    defaults: {
+                        name: (_b = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.role) === null || _b === void 0 ? void 0 : _b.name,
+                        value: (_d = (_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.role) === null || _d === void 0 ? void 0 : _d.value,
+                    },
+                });
                 const token = (0, jwt_1.generateToken)({ id: user.id, name: user.name, email: user.email, role: role === null || role === void 0 ? void 0 : role.value });
                 res.status(200).json({ message: 'Login successful', token });
                 return;
             }
             catch (err) {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Internal server error', err });
                 return;
             }
         });
@@ -82,17 +89,45 @@ class AuthController {
     static forgotPassword(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log(req.body, "forgot password");
                 const { email } = req.body;
                 const user = yield User.findOne({ where: { email } });
+                console.log("user", user);
                 if (!user) {
                     res.status(404).json({ message: 'User not found' });
                     return;
                 }
-                res.status(200).json({ message: 'Password reset link sent to email' });
+                const token = Math.random().toString(36).substring(7);
+                const [forgot, created] = yield ForgotPassword.findOrCreate({ where: { email }, defaults: { email, token } });
+                console.log(forgot, created, "ASSSSSSSSSSSSSS");
+                // await sendResetEmail(email, forgot.token);
+                console.log("email sent");
+                res.status(200).json({ message: 'Password reset link sent to email', token: forgot.token });
                 return;
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: 'Internal server error' });
+                return;
+            }
+        });
+    }
+    static getResetPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { token } = req.params;
+                const forgot = yield ForgotPassword.findOne({ where: { token } });
+                if (!forgot) {
+                    res.status(404).json({ message: 'Invalid token' });
+                    return;
+                }
+                console.log(forgot);
+                res.status(200).json({ message: 'Token verified', email: forgot.email });
+                return;
+            }
+            catch (err) {
+                console.log(err);
+                res.status(500).json({ message: 'Internal server error', err });
                 return;
             }
         });
@@ -100,14 +135,20 @@ class AuthController {
     static resetPassword(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { email, password } = req.body;
+                let { email, token, password } = req.body;
+                token = req.params.token;
                 const user = yield User.findOne({ where: { email } });
                 if (!user) {
                     res.status(404).json({ message: 'User not found' });
                     return;
                 }
-                user.password = password;
-                yield user.save();
+                const forgot = yield ForgotPassword.findOne({ where: { email, token } });
+                if (!forgot) {
+                    res.status(404).json({ message: 'Invalid token' });
+                    return;
+                }
+                yield User.update({ password: (0, bcrypt_1.hashPassword)(password) }, { where: { email } });
+                yield ForgotPassword.destroy({ where: { email, token } });
                 res.status(200).json({ message: 'Password reset successful' });
                 return;
             }
