@@ -219,6 +219,7 @@ class AlumniController {
                 return;
             }
             catch (error) {
+                console.log("Error", error);
                 res.status(500).json({ message: "Internal server error" });
                 return;
             }
@@ -246,9 +247,14 @@ class AlumniController {
                 const data = req.body;
                 data["approval"] = false;
                 const response = yield Alumni.create(data);
+                if (response) {
+                    res.status(201).json({ message: "Alumni request created successfully" });
+                    return;
+                }
             }
             catch (error) {
                 res.status(505).json({ message: "Internal Server Error", error });
+                return;
             }
         });
     }
