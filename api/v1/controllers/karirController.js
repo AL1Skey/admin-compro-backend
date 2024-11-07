@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = __importDefault(require("../models"));
+const sequelize_1 = __importDefault(require("sequelize"));
 const Karir = models_1.default.Karir;
 class KarirController {
     static create(req, res) {
@@ -44,7 +45,17 @@ class KarirController {
     static getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const karir = yield Karir.findAll();
+                const query = [];
+                let karir;
+                if (req.query.skip) {
+                    query.push({ end_date: { [sequelize_1.default.Op.gt]: new Date() } });
+                    karir = yield Karir.findAll({
+                        where: query
+                    });
+                }
+                else {
+                    karir = yield Karir.findAll();
+                }
                 const formattedKarir = karir ? karir.map((b) => {
                     const formattedData = Object.assign({}, b.dataValues);
                     if (formattedData.end_date instanceof Date) {

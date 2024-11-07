@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import db from "../models";
+import sequelize from "sequelize";
 const Karir = db.Karir;
 class KarirController {
   public static async create(req: Request, res: Response): Promise<void> {
@@ -31,7 +32,17 @@ class KarirController {
 
   public static async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const karir = await Karir.findAll();
+      const query: any = [];
+      let karir:any;
+      if (req.query.skip) {
+        query.push({ end_date: { [sequelize.Op.gt]: new Date() } });
+        karir = await Karir.findAll({
+          where: query
+        });
+      }
+      else{
+        karir = await Karir.findAll();
+      }
 
       const formattedKarir = karir ? karir.map((b: any) => {
         const formattedData = { ...b.dataValues };

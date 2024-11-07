@@ -14,7 +14,8 @@
     "build": "tsc",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add api",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel": "tsc && vercel && vercel --prod"
   },
   "author": "Adam Nur Ramadan",
   "license": "ISC",

@@ -19,8 +19,11 @@ router.get('/user', UserController.getOne);
 router.get("/about-us", AboutUsController.get);
 
 router.get('/alumni', AlumniController.getAll);
+router.get('/alumni-angkatan', AlumniController.getAllByAngkatan);
 router.get('/alumni/:id', AlumniController.getById);
-router.post('/alumni',AlumniController.alumniRequest)
+router.post('/alumni',AlumniController.alumniRequest);
+
+router.get('/angkatan',AlumniController.getAllAngkatan);
 
 router.get('/jurusan', JurusanController.getAll);
 router.get('/jurusan/:id', JurusanController.getById);

@@ -56,11 +56,30 @@ class AlumniController {
                 data["approval"] = data["approval"]
                     ? !!parseInt(data["approval"])
                     : false;
-                data["isShown"] = data["isShown"]
-                    ? !!parseInt(data["isShown"])
-                    : false;
+                data["isShown"] = data["isShown"] ? !!parseInt(data["isShown"]) : false;
                 const alumni = yield Alumni.create(data);
                 res.status(201).json({ message: "Alumni created successfully" });
+                return;
+            }
+            catch (error) {
+                res.status(500).json({ message: "Internal server error", error });
+                return;
+            }
+        });
+    }
+    static getAllAngkatan(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const angkatanList = yield Alumni.findAll({
+                    attributes: [
+                        [
+                            models_1.default.sequelize.fn("DISTINCT", models_1.default.sequelize.col("angkatan")),
+                            "angkatan",
+                        ],
+                    ],
+                    order: [["angkatan", "DESC"]],
+                });
+                res.status(200).json(angkatanList.map((item) => item.angkatan));
                 return;
             }
             catch (error) {
@@ -83,6 +102,12 @@ class AlumniController {
                     if (req.query.approval) {
                         query.push({ approval: req.query.approval === "true" });
                     }
+                    if (req.query.angkatan) {
+                        query.push({ angkatan: req.query.angkatan });
+                    }
+                    else {
+                        query.push({ angkatan: { [sequelize_1.default.Op.ne]: "" } });
+                    }
                     if (req.query.isShown) {
                         query.push({ isShown: req.query.isShown === "true" });
                     }
@@ -97,10 +122,137 @@ class AlumniController {
                             pages = 0;
                         }
                     }
+                    condition["limit"] = limit;
+                    condition["offset"] = pages * limit;
+                    // condition['attributes'] = [ [db.sequelize.fn('DISTINCT', db.sequelize.col('name')),'name'],'id' ,'email', 'image', 'phone', 'jobs', 'angkatan', 'jurusan', 'approval', 'isShown'];
+                    query.push({ name: { [sequelize_1.default.Op.ne]: "" } });
+                    query.push({ angkatan: { [sequelize_1.default.Op.ne]: "" } });
+                    query.push({ jurusan: { [sequelize_1.default.Op.ne]: "" } });
                     condition["where"] = { [sequelize_1.default.Op.and]: query };
                 }
-                condition["limit"] = limit;
-                condition["offset"] = pages * limit;
+                condition["order"] = [["createdAt", "DESC"]];
+                const response = yield Alumni.findAll(condition);
+                let alumni = response
+                    ? yield Promise.all(response === null || response === void 0 ? void 0 : response.map((alumnus) => __awaiter(this, void 0, void 0, function* () {
+                        var _a;
+                        const formattedData = Object.assign({}, alumnus.dataValues);
+                        console.log(formattedData);
+                        const jurusan = yield Jurusan.findByPk(formattedData.jurusan);
+                        return {
+                            id: formattedData.id,
+                            name: formattedData.name,
+                            email: formattedData.email,
+                            image: formattedData.image,
+                            phone: formattedData.phone,
+                            jobs: formattedData.jobs,
+                            angkatan: formattedData.angkatan,
+                            jurusan: (_a = jurusan === null || jurusan === void 0 ? void 0 : jurusan.name) !== null && _a !== void 0 ? _a : formattedData.jurusan,
+                            approval: formattedData.approval,
+                            isShown: formattedData.isShown,
+                        };
+                    })))
+                    : [];
+                console.log(alumni);
+                let result;
+                if ((alumni === null || alumni === void 0 ? void 0 : alumni.length) === 0 || alumni === null) {
+                    res.status(404).json([]);
+                    return;
+                }
+                if (req.query) {
+                    if (req.query.reformat) {
+                        const groupedData = alumni.reduce((acc, current) => {
+                            const angkatan = current.angkatan;
+                            if (!acc[angkatan]) {
+                                acc[angkatan] = [];
+                            }
+                            acc[angkatan].push(current);
+                            return acc;
+                        }, {});
+                        result = Object.keys(groupedData)
+                            .sort((a, b) => parseInt(b, 10) - parseInt(a, 10)) // Sort by angkatan descending
+                            .map((angkatan) => {
+                            const alumnus = groupedData[angkatan];
+                            const total = alumnus.length;
+                            const jurusan = alumnus.reduce((acc, current) => {
+                                const jurusanName = current.jurusan;
+                                if (!acc[jurusanName]) {
+                                    acc[jurusanName] = {
+                                        Jurusan: jurusanName,
+                                        Alumni: [],
+                                        total: 0,
+                                    };
+                                }
+                                acc[jurusanName].Alumni.push(current.name);
+                                acc[jurusanName].total++;
+                                return acc;
+                            }, {});
+                            return {
+                                angkatan: parseInt(angkatan, 10),
+                                total,
+                                alumni: Object.values(jurusan),
+                            };
+                        });
+                    }
+                }
+                if (result) {
+                    res.status(200).json(result);
+                    return;
+                }
+                res.status(200).json(alumni);
+                return;
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ message: "Internal server error", error });
+                return;
+            }
+        });
+    }
+    static getAllByAngkatan(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!Alumni) {
+                    throw new Error("Alumni model is not defined");
+                }
+                let pages = 0;
+                let offset = 5;
+                // Get Angkatan list
+                let angkatanList = yield Alumni.findAll({
+                    attributes: [
+                        [
+                            models_1.default.sequelize.fn("DISTINCT", models_1.default.sequelize.col("angkatan")),
+                            "angkatan",
+                        ],
+                    ],
+                    order: [["angkatan", "DESC"]],
+                });
+                angkatanList = angkatanList.map((item) => {
+                    if ((item === null || item === void 0 ? void 0 : item.angkatan) > 0) {
+                        return item.angkatan;
+                    }
+                });
+                // Start Condition
+                let condition = {};
+                if (req.query) {
+                    let query = [];
+                    if (req.query.approval) {
+                        query.push({ approval: req.query.approval === "true" });
+                    }
+                    if (req.query.isShown) {
+                        query.push({ isShown: req.query.isShown === "true" });
+                    }
+                    if (req.query.pages) {
+                        pages = parseInt(req.query.pages);
+                    }
+                    query.push({ angkatan: { [sequelize_1.default.Op.and]: {
+                                [sequelize_1.default.Op.lte]: angkatanList[(pages * offset)],
+                                [sequelize_1.default.Op.gt]: angkatanList[(pages * offset) + 5]
+                            }
+                        } });
+                    query.push({ name: { [sequelize_1.default.Op.ne]: "" } });
+                    query.push({ jurusan: { [sequelize_1.default.Op.ne]: "" } });
+                    condition["where"] = { [sequelize_1.default.Op.and]: query };
+                }
                 condition["order"] = [["angkatan", "DESC"]];
                 const response = yield Alumni.findAll(condition);
                 let alumni = response
@@ -241,6 +393,23 @@ class AlumniController {
             }
         });
     }
+    static bulkDelete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.body;
+                for (let i = 0; i < id.length; i++) {
+                    yield Alumni.destroy({ where: { id: id[i] } });
+                }
+                res.status(200).json({ message: "Alumni deleted successfully" });
+                return;
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ message: "Internal server error" });
+                return;
+            }
+        });
+    }
     static alumniRequest(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -248,7 +417,9 @@ class AlumniController {
                 data["approval"] = false;
                 const response = yield Alumni.create(data);
                 if (response) {
-                    res.status(201).json({ message: "Alumni request created successfully" });
+                    res
+                        .status(201)
+                        .json({ message: "Alumni request created successfully" });
                     return;
                 }
             }
