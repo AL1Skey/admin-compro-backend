@@ -44,7 +44,15 @@ class DewanController {
     static getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const dewan = yield Dewan.findAll();
+                let condition = {};
+                if (req.query) {
+                    let query = [];
+                    if (req.query.name) {
+                        query.push({ "name": req.query.name });
+                    }
+                    condition["where"] = query;
+                }
+                const dewan = yield Dewan.findAll(condition);
                 res.status(200).json(dewan);
             }
             catch (error) {

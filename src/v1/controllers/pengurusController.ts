@@ -28,8 +28,17 @@ class PengurusController {
   }
 
   public static async getAll(req: Request, res: Response): Promise<void> {
-    try {
-      const pengurus = await Pengurus.findAll();
+    try { 
+        let condition: { [key: string]: any } = {};
+        if(req.query){
+          let query:any[] = [];
+          if(req.query.name){
+            query.push({"name":req.query.name});
+          }
+          
+          condition["where"] = query;
+      }
+      const pengurus = await Pengurus.findAll(condition);
       res.status(200).json(pengurus);
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });

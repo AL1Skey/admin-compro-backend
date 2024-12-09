@@ -21,6 +21,7 @@ router.get('/user', userController_1.default.getOne);
 router.get("/about-us", aboutUsController_1.default.get);
 router.get('/alumni', alumniController_1.default.getAll);
 router.get('/alumni-angkatan', alumniController_1.default.getAllByAngkatan);
+router.post('/check-alumni', alumniController_1.default.checkName);
 router.get('/alumni/:id', alumniController_1.default.getById);
 router.post('/alumni', alumniController_1.default.alumniRequest);
 router.get('/angkatan', alumniController_1.default.getAllAngkatan);

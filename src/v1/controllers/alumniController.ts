@@ -59,11 +59,13 @@ class AlumniController {
       if (cloudinaryUrls) {
         data["image"] = cloudinaryUrls[0];
       }
-
+      
       data["approval"] = data["approval"]
         ? !!parseInt(data["approval"])
         : false;
       data["isShown"] = data["isShown"] ? !!parseInt(data["isShown"]) : false;
+      // Check if name already exists in the database (case insensitive)
+      
       const alumni = await Alumni.create(data);
       res.status(201).json({ message: "Alumni created successfully" });
       return;
@@ -139,7 +141,7 @@ class AlumniController {
         query.push({ jurusan: { [sequelize.Op.ne]: "" } });
         condition["where"] = { [sequelize.Op.and]: query };
       }
-      condition["order"] = [["createdAt", "DESC"]];
+      condition["order"] = [["updatedAt", "DESC"]];
 
       const response = await Alumni.findAll(condition);
       let alumni = response
@@ -167,7 +169,7 @@ class AlumniController {
       console.log(alumni);
       let result: any;
       if (alumni?.length === 0 || alumni === null) {
-        res.status(404).json([]);
+        res.status(200).json([]);
         return;
       }
       if (req.query) {
@@ -296,7 +298,7 @@ class AlumniController {
       console.log(alumni);
       let result: any;
       if (alumni?.length === 0 || alumni === null) {
-        res.status(404).json([]);
+        res.status(200).json([]);
         return;
       }
       if (req.query) {
@@ -365,8 +367,10 @@ class AlumniController {
   public static async update(req: Request, res: Response): Promise<void> {
     try {
       const data: { [key: string]: any } = req.body;
+      
       const cloudinaryUrls = req.body.cloudinaryUrls;
       console.log(req.body, "update");
+      
       // Check if there are any Cloudinary URLs
       if (cloudinaryUrls?.length === 0) {
         console.error("No Cloudinary URLs found.");
@@ -375,12 +379,18 @@ class AlumniController {
       if (cloudinaryUrls) {
         data["image"] = cloudinaryUrls[0];
       }
-      if (data["approval"]) {
+      // Check if approval is a number
+      let hasNumbers = /\d/.test(data["approval"]);
+      if (hasNumbers) {
         data["approval"] = !!parseInt(data["approval"]);
+      }
+      else{
+        console.log(typeof data["approval"],"approval tipe data");
       }
       if (data["isShown"]) {
         data["isShown"] = !!parseInt(data["isShown"]);
       }
+      data["updatedAt"] = new Date();
       console.log(data);
       await Alumni.update(data, { where: { id: req.params.id } });
       res.status(200).json({ message: "Alumni updated successfully" });
@@ -428,8 +438,29 @@ class AlumniController {
     try {
       const data: { [key: string]: any } = req.body;
       data["approval"] = false;
+      const check = await Alumni.findOne({
+        where: { name:data?.name, angkatan: data?.angkatan, jurusan: data?.jurusan, approval: false },
+      });
+      let response:any
+      const existingAlumni = await Alumni.findOne({
+        where: sequelize.where(
+          sequelize.fn('LOWER', sequelize.col('name')),
+          sequelize.fn('LOWER', data['name'].trim())
+        )
+      });
 
-      const response = await Alumni.create(data);
+      if (existingAlumni) {
+        console.log("Name already exists");
+        console.log(existingAlumni);
+        res.status(200).json({ message: "Nama sudah terdaftar" });
+        return;
+      }
+      if (check) {
+        response = await Alumni.update({...data,updatedAt:new Date()}, { where: { id: check.id } });
+      }
+      else{
+        response = await Alumni.create(data);
+      }
       if (response) {
         res
           .status(201)
@@ -465,6 +496,26 @@ class AlumniController {
       res.status(500).json({ message: "Internal server error" });
       return;
     }
+  }
+
+  public static async checkName(req: Request, res:Response):Promise<any>{
+      try{
+        console.log("MASIUKKK")
+        const {name} = req.body;
+        console.log(name);
+        const check = await Alumni.findOne({where:{name}});
+        console.log("CHECKKED")
+        if(check){
+          res.status(200).json({message:"Name already exist"})
+          return;
+        }
+        res.status(200).json({safe:true})
+        return;
+      }
+      catch(error){
+        res.status(500).json({message:"Internal server error", error});
+        return
+      }
   }
 }
 

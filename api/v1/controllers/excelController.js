@@ -76,7 +76,9 @@ class ExcelController {
                 console.log(mappedData1[0], "MApped Data");
                 console.log(mappedData1.length);
                 // Filter out any rows where all fields are empty or null
-                const filteredData = mappedData1.filter((row) => Object.values(row).some((value) => value !== "" && value !== null));
+                let filteredData = mappedData1.filter((row) => Object.values(row).some((value) => value !== "" && value !== null));
+                // Filter out any rows where it has duplicate name
+                filteredData = filteredData.filter((row, index, self) => index === self.findIndex((t) => t.Nama === row.Nama));
                 console.log(filteredData[0], "Filtered Data");
                 // Inside the mappedData Promise.all function
                 const mappedData = yield Promise.all(filteredData.map((row) => __awaiter(this, void 0, void 0, function* () {
@@ -110,9 +112,17 @@ class ExcelController {
                     }
                 })));
                 // console.log(mappedData);
-                // Create new records in the database
-                yield table.bulkCreate(mappedData);
-                console.log("Upload Excel");
+                // Filter out existing records in the database to avoid duplicates
+                const existingRecords = yield table.findAll({
+                    where: {
+                        email: filteredData.map((row) => row.email),
+                    },
+                });
+                const existingEmails = existingRecords.map((record) => record.email);
+                const newRecords = mappedData.filter((row) => !existingEmails.includes(row.email));
+                if (newRecords.length > 0) {
+                    yield table.bulkCreate(newRecords);
+                }
                 res.status(200).json({ message: "Upload Excel" });
                 return;
             }

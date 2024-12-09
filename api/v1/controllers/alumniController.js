@@ -57,6 +57,7 @@ class AlumniController {
                     ? !!parseInt(data["approval"])
                     : false;
                 data["isShown"] = data["isShown"] ? !!parseInt(data["isShown"]) : false;
+                // Check if name already exists in the database (case insensitive)
                 const alumni = yield Alumni.create(data);
                 res.status(201).json({ message: "Alumni created successfully" });
                 return;
@@ -130,7 +131,7 @@ class AlumniController {
                     query.push({ jurusan: { [sequelize_1.default.Op.ne]: "" } });
                     condition["where"] = { [sequelize_1.default.Op.and]: query };
                 }
-                condition["order"] = [["createdAt", "DESC"]];
+                condition["order"] = [["updatedAt", "DESC"]];
                 const response = yield Alumni.findAll(condition);
                 let alumni = response
                     ? yield Promise.all(response === null || response === void 0 ? void 0 : response.map((alumnus) => __awaiter(this, void 0, void 0, function* () {
@@ -155,7 +156,7 @@ class AlumniController {
                 console.log(alumni);
                 let result;
                 if ((alumni === null || alumni === void 0 ? void 0 : alumni.length) === 0 || alumni === null) {
-                    res.status(404).json([]);
+                    res.status(200).json([]);
                     return;
                 }
                 if (req.query) {
@@ -278,7 +279,7 @@ class AlumniController {
                 console.log(alumni);
                 let result;
                 if ((alumni === null || alumni === void 0 ? void 0 : alumni.length) === 0 || alumni === null) {
-                    res.status(404).json([]);
+                    res.status(200).json([]);
                     return;
                 }
                 if (req.query) {
@@ -359,12 +360,18 @@ class AlumniController {
                 if (cloudinaryUrls) {
                     data["image"] = cloudinaryUrls[0];
                 }
-                if (data["approval"]) {
+                // Check if approval is a number
+                let hasNumbers = /\d/.test(data["approval"]);
+                if (hasNumbers) {
                     data["approval"] = !!parseInt(data["approval"]);
+                }
+                else {
+                    console.log(typeof data["approval"], "approval tipe data");
                 }
                 if (data["isShown"]) {
                     data["isShown"] = !!parseInt(data["isShown"]);
                 }
+                data["updatedAt"] = new Date();
                 console.log(data);
                 yield Alumni.update(data, { where: { id: req.params.id } });
                 res.status(200).json({ message: "Alumni updated successfully" });
@@ -415,7 +422,25 @@ class AlumniController {
             try {
                 const data = req.body;
                 data["approval"] = false;
-                const response = yield Alumni.create(data);
+                const check = yield Alumni.findOne({
+                    where: { name: data === null || data === void 0 ? void 0 : data.name, angkatan: data === null || data === void 0 ? void 0 : data.angkatan, jurusan: data === null || data === void 0 ? void 0 : data.jurusan, approval: false },
+                });
+                let response;
+                const existingAlumni = yield Alumni.findOne({
+                    where: sequelize_1.default.where(sequelize_1.default.fn('LOWER', sequelize_1.default.col('name')), sequelize_1.default.fn('LOWER', data['name'].trim()))
+                });
+                if (existingAlumni) {
+                    console.log("Name already exists");
+                    console.log(existingAlumni);
+                    res.status(200).json({ message: "Nama sudah terdaftar" });
+                    return;
+                }
+                if (check) {
+                    response = yield Alumni.update(Object.assign(Object.assign({}, data), { updatedAt: new Date() }), { where: { id: check.id } });
+                }
+                else {
+                    response = yield Alumni.create(data);
+                }
                 if (response) {
                     res
                         .status(201)
@@ -451,6 +476,27 @@ class AlumniController {
             }
             catch (error) {
                 res.status(500).json({ message: "Internal server error" });
+                return;
+            }
+        });
+    }
+    static checkName(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("MASIUKKK");
+                const { name } = req.body;
+                console.log(name);
+                const check = yield Alumni.findOne({ where: { name } });
+                console.log("CHECKKED");
+                if (check) {
+                    res.status(200).json({ message: "Name already exist" });
+                    return;
+                }
+                res.status(200).json({ safe: true });
+                return;
+            }
+            catch (error) {
+                res.status(500).json({ message: "Internal server error", error });
                 return;
             }
         });

@@ -20,6 +20,7 @@ router.get("/about-us", AboutUsController.get);
 
 router.get('/alumni', AlumniController.getAll);
 router.get('/alumni-angkatan', AlumniController.getAllByAngkatan);
+router.post('/check-alumni',AlumniController.checkName)
 router.get('/alumni/:id', AlumniController.getById);
 router.post('/alumni',AlumniController.alumniRequest);
 
