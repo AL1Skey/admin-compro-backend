@@ -60,7 +60,7 @@ class BlogController {
                                 img: item.image,
                                 category: item.category,
                                 author: item.author,
-                                date: new Date(item.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+                                date: new Date(item.createAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
                                 content: item.description,
                             };
                         });
