@@ -48,7 +48,11 @@ class KarirController {
                 const query = [];
                 let karir;
                 if (req.query.skip) {
-                    query.push({ end_date: { [sequelize_1.default.Op.gte]: new Date() } });
+                    // Mengurangi satu hari dari tanggal hari ini 
+                    let today = new Date();
+                    let yesterday = new Date(today);
+                    yesterday.setDate(today.getDate() - 1);
+                    query.push({ end_date: { [sequelize_1.default.Op.gte]: yesterday } });
                     karir = yield Karir.findAll({
                         where: query
                     });
