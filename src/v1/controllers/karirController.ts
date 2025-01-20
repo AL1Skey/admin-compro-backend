@@ -35,7 +35,7 @@ class KarirController {
       const query: any = [];
       let karir:any;
       if (req.query.skip) {
-        query.push({ end_date: { [sequelize.Op.gt]: new Date() } });
+        query.push({ end_date: { [sequelize.Op.gte]: new Date() } });
         karir = await Karir.findAll({
           where: query
         });
